@@ -1,0 +1,85 @@
+﻿@page "/"
+
+  <div>
+      <h2>Ejemplo foreach</h2>
+     
+      <h3>Películas</h3>
+
+    @if(Peliculas is null)
+    {
+        <p>Cargando las peliculas</p>
+    }
+    else if (Peliculas.Count == 0)
+    {
+        <p>No hay películas disponibles.</p>
+    }
+    else
+    {
+        @foreach (var pelicula in Peliculas)
+        {
+            <div>
+                <p>
+                    Titulo: @pelicula.Titulo
+
+                    @if (DateTime.Today.Subtract(pelicula.Lanzamiento).Days <= 14)
+                    {
+                        <span style="color: red"> (¡Nuevo!) </span>
+                    }
+                </p>
+                <p>Fecha lanzamiento: <b>@pelicula.Lanzamiento.ToString("dd MMM yyyy")</b></p>
+            </div>
+        }
+    }
+        
+
+   
+  </div>
+
+@* <div>
+    <h2>Ejemplo for</h2>
+
+    <h3>Películas</h3>
+    @for( int i = 0; i< Peliculas.Count; i++)
+    {
+        <div>
+            <p>@(i+1)) Titulo: <b>@Peliculas[i].Titulo</b> </p>
+            <p>Fecha lanzamiento: <b>@Peliculas[i].Lanzamiento.ToString("dd MMM yyyy")</b></p>
+        </div>
+        
+    }
+
+</div> *@
+
+@code{
+
+
+    Pelicula WakandaForever { get { return ObtenerPelicula(); } }
+    List<Pelicula>? Peliculas { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+        Peliculas = ObtenerPeliculas();
+       // Peliculas = new List<Pelicula>();
+    }
+
+    Pelicula ObtenerPelicula()
+    {
+        return new Pelicula
+            {
+                Titulo = "Wakanda Forever",
+                Lanzamiento = new DateTime(2023, 11, 10)
+            };
+    }
+
+    List<Pelicula> ObtenerPeliculas()
+    {
+        return new List<Pelicula>()
+        {
+            new Pelicula{ Titulo = "Wakanda Forever",Lanzamiento = new DateTime(2023, 11, 10)},
+            new Pelicula{ Titulo = "Dr. Strange",Lanzamiento = new DateTime(2022, 8, 21)},
+            new Pelicula{ Titulo = "Rambo",Lanzamiento = new DateTime(2023, 12, 26)}
+        };
+    }
+}
